@@ -10,23 +10,23 @@
     
     <title>js form</title>
 </head>
-<body class="bg-success d-flex align-items-center justify-content-center h-100 w-100 p-3">
+<body class="bg-success d-flex align-items-center justify-content-center  p-3">
       <form id="my-form">
-    <div class="container bg-info mt-5 p-3 pb-2 rounded-3" id="cont">
+    <div class="container container-fluid bg-info mt-5 p-3 pb-2 rounded-3 w-100" id="cont">
       
         <h1 class="text-center ">Add user</h1>
         <h5 class="text-danger"></h5>
         <div class="mb-1" id="label">
             <label class="form-label m-0" id="fname">Name:</label>
-            <input class="form-control form-control-sm" id="name" type="text" value="">
+            <input class="form-control form-control-sm" id="name" type="text" value="" required>
         </div>
         <div class="mb-1" id="label">
             <label class="form-label m-0" id="email">Email:</label>
-            <input class="form-control form-control-sm" id="mail" value="" type="email">
+            <input class="form-control form-control-sm" id="mail" value="" type="email" required>
         </div>
         <div class="mb-3" id="label">
             <label class="form-label m-0" >Contact:</label>
-            <input class="form-control form-control-sm" id="phone" value="" type="tel">
+            <input class="form-control form-control-sm" id="phone" value="" type="tel" required>
         </div>
         <button style="background-color: orange;" type="submit" class="btn btn-sm  text-white w-100 mb-2 rounded-3" id="button">ADD</button>
         <ul class="items" id="user">
@@ -36,7 +36,8 @@
 </form>
 
     <script >
-        var btn = document.getElementsByTagName('button')
+
+var btn = document.getElementsByTagName('button')
         var username=document.getElementById('name');
         var userphone=document.getElementById('phone');
         var useremail=document.getElementById('mail')
@@ -45,6 +46,10 @@
         var form = document.getElementById('my-form')
         
         form.addEventListener('submit',onSubmit);
+
+        itemul.addEventListener('click',removeitem);
+        itemul.addEventListener('click',edititem);
+
         
         // create a function
         function onSubmit(e){
@@ -57,9 +62,22 @@
             else{
                 // create list item
                 var li = document.createElement('li')
-        
+                
+                // create edit btn
+                let editbtn = document.createElement('button')
+                editbtn.className = 'btn  bg-primary btn-sm text-white edit rounded-5 ml-2 float-right';
+                // editbtn.value='edit'
+                 editbtn.appendChild(document.createTextNode('edit'));
+
+                // create delete btn
+                var deletebtn = document.createElement('button');
+                deletebtn.className = 'btn btn-danger btn-sm float-right my-4 delete ' ;
+                deletebtn.appendChild(document.createTextNode('X'))
+
                 // text for list
-                li.appendChild(document.createTextNode(`${username.value} ${useremail.value} ${userphone.value}`))
+                li.appendChild(document.createTextNode(`${username.value}-${useremail.value}-${userphone.value}`));
+                li.appendChild(editbtn)
+                li.appendChild(deletebtn);
                 // li.appendChild(document.createTextNode(useremail.value))
                 // li.appendChild(document.createTextNode(userphone.value))
         
@@ -69,8 +87,9 @@
                     email:useremail.value,
                     phone:userphone.value,
                 }
-        
+      
                 let str_obj=JSON.stringify(obj);
+                
                 
                 localStorage.setItem(useremail.value,str_obj)
         
@@ -81,6 +100,51 @@
                 useremail.value='';
                 userphone.value='';
         }
+        }
+
+        // removing function 
+        function removeitem(e){
+            if(e.target.classList.contains('delete')){
+                if (confirm('Do you want to remove item from LocalStorage?')) {
+                    var li = e.target.parentElement;
+
+                    // access li text & split email from it & delte from local storage
+                    var litext=li.textContent;
+                    let arr = litext.split('-');
+                    localStorage.removeItem(arr[1])
+
+
+                    itemul.removeChild(li)
+        
+                }
+
+            }
+        }
+
+
+
+
+        // function for edit btn
+        function edititem(e){
+            if(e.target.classList.contains('edit')){
+                var li = e.target.parentElement;
+
+                // access li text & split email from it & delte from local storage
+                
+                var siblingtext=e.target.previousSibling;
+                var maintext=siblingtext.textContent
+                let arr = maintext.split('-');
+                username.value=arr[0]
+                useremail.value=arr[1];
+                userphone.value=arr[2]
+
+
+                localStorage.removeItem(arr[1])
+
+
+                itemul.removeChild(li)
+               
+            }
         }
         </script>
     <!-- Optional JavaScript; choose one of the two! -->

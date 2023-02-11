@@ -7,3 +7,4 @@ let litag=document.getElementsByTagName('li')
 for(let i=0;i<litag.length;i++){
     litag[i].style.backgroundColor='skyblue'
 }
+console.log(typeof liclass)

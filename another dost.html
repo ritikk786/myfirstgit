@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container my-5">
+      <h2 class="text-center">Book a Slot</h2>
+      <form id="booking-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number">
+        </div>
+        <div class="form-group">
+          <label for="time">Time for call</label>
+          <input type="date" class="form-control" id="date" >
+          <input type="time" class="form-control" id="time">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    document.querySelector('#booking-form').addEventListener('submit', (event) => {
+          event.preventDefault();
+          const formData = {
+            name: document.querySelector('#name').value,
+            email: document.querySelector('#email').value,
+            phone: document.querySelector('#phone').value,
+            time: document.querySelector('#time').value
+          };
+          localStorage.setItem("user", JSON.stringify(formData));
+          displayData(formData);
+        });
+
+      function displayData(userData) {
+        const dataContainer = document.createElement("div");
+        dataContainer.innerHTML = `
+          <p><b>Name:</b> ${userData.name}</p>
+          <p><b>Email:</b> ${userData.email}</p>
+          <p><b>Phone:</b> ${userData.phone}</p>
+          <p><b>Time:</b> ${userData.time}</p>
+          <button id="delete-button">Delete</button>
+        `;
+        document.querySelector(".container").appendChild(dataContainer);
+        document.querySelector("#delete-button").addEventListener("click", () => {
+          dataContainer.remove();
+          localStorage.removeItem("user");
+        });
+      }
+        function displayData(userData) {
+            const previousDataContainer = document.querySelector('.container div');
+            if (previousDataContainer) {
+              previousDataContainer.remove();
+            }
+
+            const dataContainer = document.createElement("div");
+            dataContainer.innerHTML = `
+              <p><b>Name:</b> ${userData.name}</p>
+              <p><b>Email:</b> ${userData.email}</p>
+              <p><b>Phone:</b> ${userData.phone}</p>
+              <p><b>Time:</b> ${userData.time}</p>
+              <button id="edit-button">Edit</button>
+              <button id="delete-button">Delete</button>
+            `;
+            document.querySelector(".container").appendChild(dataContainer);
+
+            document.querySelector("#edit-button").addEventListener("click", () => {
+              // Remove previous data
+              dataContainer.remove();
+              localStorage.removeItem("user");
+
+              // Add the user data to the form inputs
+              document.querySelector('#name').value = userData.name;
+              document.querySelector('#email').value = userData.email;
+              document.querySelector('#phone').value = userData.phone;
+              document.querySelector('#time').value = userData.time;
+            });
+
+            document.querySelector("#delete-button").addEventListener("click", () => {
+              dataContainer.remove();
+              localStorage.removeItem("user");
+            });
+          }
+
+
+</script>
+
+</html>

@@ -1,5 +1,6 @@
 const items=document.getElementsByClassName('list-group-item')
-// console.log(items[0].textContent)
+console.log(items)
+
 items[2].style.backgroundColor='green';
 
 // make all the element bold

@@ -12,13 +12,20 @@
 
 
 //query selctor all
-let sec_li=document.querySelectorAll('li');
-// console.log(sec_li[1].textContent)
-sec_li[1].style.color='green';
+// let sec_li=document.querySelectorAll('li');
+// // console.log(sec_li[1].textContent)
+// sec_li[1].style.color='green';
 
-let odd=document.querySelectorAll('li:nth-child(odd)')
+// let odd=document.querySelectorAll('li:nth-child(odd)')
 
-for(let i=0;i<odd.length;i++){
-    odd[i].style.backgroundColor='green'
+// for(let i=0;i<odd.length;i++){
+//     odd[i].style.backgroundColor='green'
 
-}
+// }
+
+let select = document.getElementsByTagName('ul');
+console.log(select);
+let classs = document.getElementsByClassName('list-group')
+console.log(classs);
+let quer=document.querySelector('ul');
+console.log(quer)
