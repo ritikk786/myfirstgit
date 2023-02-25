@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selling Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="container w-50 mt-3">
+        <div class="card">
+            <div class="card-header bg-grey ">
+                <h3>Expense Tracker</h3>
+            </div>
+            <div class="card-body">
+                <form id="form">
+                    <label for="amount" class="form-label">Selling Price:</label>
+                    <input type="number" class="form-control" id="amount">
+
+                    <label for="name" class="form-label">Product Name:</label>
+                    <input type="text" class="form-control" id="name"><br>
+                    <button type="submit" class="btn btn-info submit">Add Product</button>
+
+                </form>
+                <div class="container">
+                    <ul id="item" class="list-group-item border-0"></ul>
+                </div>
+            </div>
+            <div class="card-footer">
+                <h4>Total value: <span id="Totalvalue"></span></h4>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script >var myform=document.getElementById('form')
+        var ul=document.getElementById('item')
+        var sum=0;
+        
+        myform.addEventListener('submit',gettoCrud)
+        
+        
+        function gettoCrud(e){
+            e.preventDefault()
+            let li=document.createElement('li')
+            let amountv=document.getElementById('amount').value;
+            let namev=document.getElementById('name').value
+            let obj={
+                expenseamout:amountv,
+                description:namev
+            }
+        
+            let delbtn=document.createElement('button')
+            delbtn.className="btn btn-danger btn-sm"
+            delbtn.appendChild(document.createTextNode('delete'))
+        
+            axios.post('https://crudcrud.com/api/8db6e8108a39418faf408c2ef711e4fb/expense',obj)
+            .then((msg)=> console.log(msg))
+            .catch(err => console.log(err))
+        
+            li.appendChild(document.createTextNode(`${amountv}-${namev}`))
+            li.appendChild(delbtn)
+            ul.appendChild(li)
+            displaycost(obj)
+            // document.location.reload()
+            console.log(obj)
+            // sum=sum+Number(amountv)
+            // console.log(sum)
+            // document.getElementById('sum').value=sum;
+            amountv='';
+            namev='';
+            
+        }
+        
+        window.addEventListener('DOMContentLoaded',getdata())
+        
+        function getdata(){
+            axios.get('https://crudcrud.com/api/8db6e8108a39418faf408c2ef711e4fb/expense')
+            .then((res) => {
+                displaycost(res.data);
+                for (let i = 0; i < res.data.length; i++) {
+                  showop(res.data[i]);
+                
+                }
+              })
+            .catch(err=>console.log(err))
+            
+        }
+        
+        function showop(user){
+            let li=document.createElement('li');
+            li.id=user._id;
+            // console.log(user._id,user.expenseamout)
+        
+            let delbtn=document.createElement('button')
+            delbtn.className="btn btn-danger btn-sm delete"
+            delbtn.appendChild(document.createTextNode('delete'))
+        
+            sum=sum+user.expenseamout
+            li.appendChild(document.createTextNode(`${user.expenseamout}-${user.description}`))
+            li.appendChild(delbtn)
+            ul.appendChild(li)
+            
+            
+            
+        }
+        
+        ul.addEventListener('click',removeitem)
+        function removeitem(e) {
+          if (e.target.classList.contains('delete')) {
+            
+            console.log(e.target.parentElement.id)
+            let userid=e.target.parentElement.id;
+            axios.delete(`https://crudcrud.com/api/8db6e8108a39418faf408c2ef711e4fb/expense/${userid}`)
+            // .then(()=>alert('user deleted'))
+            // .catch(err=>console.log(err))
+            ul.removeChild(e.target.parentElement)
+        
+          }
+        }
+        function displaycost(value){
+            // console.log(value._id)
+        let total=0;
+        for(let i=0;i<value.length;i++){
+            total=total+(parseFloat(value[i].expenseamout))
+        }
+        console.log(total)
+        Totalvalue.innerHTML=total
+        }</script>
+</body>
+
+</html>
